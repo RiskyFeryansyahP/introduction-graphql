@@ -63,7 +63,7 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error)
 	UpdateTodo(ctx context.Context, id string) (*model.Todo, error)
-	DeleteTodo(ctx context.Context, id string) (string, error)
+	DeleteTodo(ctx context.Context, id string) (*model.Todo, error)
 }
 type QueryResolver interface {
 	Todos(ctx context.Context) ([]*model.Todo, error)
@@ -228,7 +228,7 @@ input NewTodo {
 type Mutation {
   createTodo(input: NewTodo!): Todo!
   updateTodo(id: ID!): Todo!
-  deleteTodo(id: ID!): String!
+  deleteTodo(id: ID!): Todo!
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -456,9 +456,9 @@ func (ec *executionContext) _Mutation_deleteTodo(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*model.Todo)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNTodo2ᚖgithubᚗcomᚋRiskyFeryansyahPᚋintroductionᚑgraphqlᚋgraphᚋmodelᚐTodo(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_todos(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {

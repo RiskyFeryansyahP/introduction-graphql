@@ -12,6 +12,8 @@ import (
 	"github.com/google/uuid"
 )
 
+var todoItem []*model.Todo
+
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
 	id, err := uuid.NewRandom()
 	if err != nil {
@@ -41,16 +43,16 @@ func (r *mutationResolver) UpdateTodo(ctx context.Context, id string) (*model.To
 	return nil, fmt.Errorf("data not found")
 }
 
-func (r *mutationResolver) DeleteTodo(ctx context.Context, id string) (string, error) {
+func (r *mutationResolver) DeleteTodo(ctx context.Context, id string) (*model.Todo, error) {
 	for k, v := range todoItem {
 		if v.ID == id {
 			todoItem = append(todoItem[:k], todoItem[k+1:]...)
 
-			return "successfully deleted todo", nil
+			return v, nil
 		}
 	}
 
-	return "", fmt.Errorf("data not found")
+	return nil, fmt.Errorf("data not found")
 }
 
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
@@ -72,4 +74,3 @@ type queryResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
-var todoItem []*model.Todo
