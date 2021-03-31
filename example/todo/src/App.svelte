@@ -18,7 +18,6 @@
 		 }
 	 } ,
   `,
-  { requestPolicy: 'cache-first' }
   );
 
   // @ts-ignore
@@ -39,7 +38,9 @@
   const mutateRemoveTodo = mutation({
 	  query: `
 	 	mutation deleteTodo($id: ID!) {
-			deleteTodo(id: $id)
+			deleteTodo(id: $id){
+				id
+			}
 		}
 	`,
   })
@@ -58,6 +59,7 @@
   })
 
   const refresh = () => {
+	console.log("trigger");
     $todos.context = { requestPolicy: 'network-only' };
   }
 
@@ -72,6 +74,7 @@
 	mutateRemoveTodo({id}).then(result => {
 		console.log(result.data, result.error);
 	});
+
 	refresh();
   }
 
