@@ -145,5 +145,26 @@ before you want to run graphql in production, you have to make sure of the follo
 1. Security
 2. Nested Queries
 
+    examples:
+
+    ```graphql
+        query {
+            pokemons {
+                id
+                name
+                pokemon_type {
+                    name
+                    pokemons {
+                        id
+                        name
+                        pokemon_type {
+                            name
+                        }
+                    }
+                }
+            }
+        }
+    ```
+
 
 ## Demo Time
